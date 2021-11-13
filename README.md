@@ -21,12 +21,12 @@ Quick starting guide for new plugin devs:
 
 - Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
 - Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
+- Install NodeJS, then run `yarn` in the command line under your repo folder.
+- Run `yarn run dev` to compile your plugin from `main.ts` to `main.js`.
 - Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
 - Reload Obsidian to load the new version of your plugin.
 - Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+- For updates to the Obsidian API run `yarn update` in the command line under your repo folder.
 
 ### Releasing new releases
 
@@ -45,8 +45,8 @@ Quick starting guide for new plugin devs:
 ### How to use
 
 - Clone this repo.
-- `npm i` or `yarn` to install dependencies
-- `npm run dev` to start compilation in watch mode.
+- `yarn i` or `yarn` to install dependencies
+- `yarn run dev` to start compilation in watch mode.
 
 ### Manually installing the plugin
 
@@ -55,13 +55,20 @@ Quick starting guide for new plugin devs:
 ### Improve code quality with eslint (optional)
 - [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
 - To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
+  - `yarn global install eslint`
 - To use eslint to analyze this project use this command:
   - `eslint main.ts`
   - eslint will then create a report with suggestions for code improvement by file and line number.
 - If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
   - `eslint .\src\`
 
+# Links
+### [mixmark-io/turndown: 🛏 An HTML to Markdown converter written in JavaScript](https://github.com/mixmark-io/turndown)
+### 
+### https://medium.com/javascript-scene/reduce-composing-software-fe22f0c39a1d
+### https://www.freecodecamp.org/news/pipe-and-compose-in-javascript-5b04004ac937/
+
+ 
 
 ### API Documentation
 
