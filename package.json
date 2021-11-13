@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "ghost-sync",
 	"version": "0.12.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Plugin allows for syncing all posts from your ghost blog",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

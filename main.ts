@@ -1,5 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
+import fetchCurrentPosts  from './fetchCurrentPosts';
+import SyncService from "./SyncService"
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -9,7 +10,6 @@ interface MyPluginSettings {
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default'
 }
-
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
@@ -17,7 +17,7 @@ export default class MyPlugin extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		const ribbonIconEl = this.addRibbonIcon('dice', 'Ghost Blog Sync', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			new Notice('This is a notice!');
 		});
@@ -36,13 +36,37 @@ export default class MyPlugin extends Plugin {
 				new SampleModal(this.app).open();
 			}
 		});
+ 
+		this.addCommand({
+			id:"ghost-sync-init",
+			name:"Init",
+			callback: () => {
+				// new SampleModal(this.app).open();
+				new Notice('Ghost Sync: Initializing');
+				console.log("woks");
+ 				new Notice('Ghost Sync: Pasted current blog post');
+				//  let postContent = await fetchCurrentPosts("https://demo.ghost.io/ghost/api/v3/content/posts/?key=22444f78447824223cefc48062");
+				//  let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
+				//  console.log(postContent)
+				//  editor.replaceSelection(postContent)//
+				new Notice(postContent);
+
+			},
+			editorCallback: async(editor: Editor, view: MarkdownView) => {
+				
+
+			}
+		});
+		
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
-			editorCallback: (editor: Editor, view: MarkdownView) => {
+			id: 'ghost-sync-update',
+			name: 'Update',
+			editorCallback: async(editor: Editor, view: MarkdownView) => {
 				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
+				new Notice('Ghost Sync: Pasted current blog post');
+				editor.replaceSelection("works")//fetchCurrentPosts("https://demo.ghost.io/ghost/api/v3/content/posts/?key=22444f78447824223cefc48062"));
+
 			}
 		});
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
@@ -120,13 +144,14 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-
+		containerEl.createEl('h2', {text: 'Settings for Ghost Blog Sync'});
+		containerEl.createEl('h3', {text: 'This app allows for syncing (download only currently) all posts from your ghost blog!'});
+		
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
+			.setName('Ghost Content API key')
+			.setDesc('example: dd0235ab7a7db900270842123a')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
+				.setPlaceholder('dd0235ab7a7db900270842123a')
 				.setValue(this.plugin.settings.mySetting)
 				.onChange(async (value) => {
 					console.log('Secret: ' + value);
