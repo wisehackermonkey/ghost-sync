@@ -5,10 +5,12 @@ import SyncService from "./SyncService"
 
 interface MyPluginSettings {
 	mySetting: string;
+	ghostContentApiKey: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+	ghostContentApiKey: ""
 }
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
@@ -40,22 +42,25 @@ export default class MyPlugin extends Plugin {
 		this.addCommand({
 			id:"ghost-sync-init",
 			name:"Init",
-			callback: () => {
+			callback: async() => {
 				// new SampleModal(this.app).open();
 				new Notice('Ghost Sync: Initializing');
 				console.log("woks");
  				new Notice('Ghost Sync: Pasted current blog post');
 				//  let postContent = await fetchCurrentPosts("https://demo.ghost.io/ghost/api/v3/content/posts/?key=22444f78447824223cefc48062");
-				//  let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
+				 let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
 				//  console.log(postContent)
 				//  editor.replaceSelection(postContent)//
-				new Notice(postContent);
+				new Notice(JSON.stringify( postContent )); 
+				
 
 			},
 			editorCallback: async(editor: Editor, view: MarkdownView) => {
-				
+				let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
+				new Notice(JSON.stringify( postContent )); 
 
-			}
+				editor.replaceSelection(JSON.stringify( postContent["value"] ))
+			} 
 		});
 		
 		// This adds an editor command that can perform some operation on the current editor instance
@@ -147,16 +152,28 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.createEl('h2', {text: 'Settings for Ghost Blog Sync'});
 		containerEl.createEl('h3', {text: 'This app allows for syncing (download only currently) all posts from your ghost blog!'});
 		
-		new Setting(containerEl)
-			.setName('Ghost Content API key')
-			.setDesc('example: dd0235ab7a7db900270842123a')
-			.addText(text => text
-				.setPlaceholder('dd0235ab7a7db900270842123a')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+		// new Setting(containerEl)
+		// 	.setName('Ghost Content API key')
+		// 	.setDesc('example: dd0235ab7a7db900270842123a')
+		// 	.addText(text => text
+		// 		.setPlaceholder('dd0235ab7a7db900270842123a')
+		// 		.setValue(this.plugin.settings.mySetting)
+		// 		.onChange(async (value) => {
+		// 			console.log('Secret: ' + value);
+		// 			this.plugin.settings.mySetting = value;
+		// 			await this.plugin.saveSettings();
+		// 		}));
+
+				new Setting(containerEl)
+				.setName('Ghost Content API key')
+				.setDesc('example: dd0235ab7a7db900270842123a')
+				.addText(text => text
+					.setPlaceholder('dd0235ab7a7db900270842123a')
+					.setValue(this.plugin.settings.ghostContentApiKey)
+					.onChange(async (value) => {
+						console.log('ghostContentApiKey: ' + value);
+						this.plugin.settings.ghostContentApiKey = value;
+						await this.plugin.saveSettings();
+					}));
 	}
 }
