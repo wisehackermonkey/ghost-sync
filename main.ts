@@ -1,6 +1,8 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import fetchCurrentPosts  from './fetchCurrentPosts';
 import SyncService from "./SyncService"
+require('dotenv').config()
+
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -11,6 +13,11 @@ interface MyPluginSettings {
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default',
 	ghostContentApiKey: ""
+}
+
+const getGhostPosts = async()=>{
+	let URL  = `https://oran.ghost.io/ghost/api/v3/content/posts?key=${process.env.GHOST_CONTENT_API_KEY}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=1`
+	return  await JSON.stringify( fetchCurrentPosts(URL));
 }
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
@@ -45,21 +52,13 @@ export default class MyPlugin extends Plugin {
 			callback: async() => {
 				// new SampleModal(this.app).open();
 				new Notice('Ghost Sync: Initializing');
-				console.log("woks");
  				new Notice('Ghost Sync: Pasted current blog post');
-				//  let postContent = await fetchCurrentPosts("https://demo.ghost.io/ghost/api/v3/content/posts/?key=22444f78447824223cefc48062");
-				 let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
-				//  console.log(postContent)
-				//  editor.replaceSelection(postContent)//
-				new Notice(JSON.stringify( postContent )); 
-				
-
+				new Notice(await getGhostPosts()); 
 			},
 			editorCallback: async(editor: Editor, view: MarkdownView) => {
-				let postContent = await fetchCurrentPosts("https://api.chucknorris.io/jokes/random");
-				new Notice(JSON.stringify( postContent )); 
+ 				new Notice("Pasted"); 
 
-				editor.replaceSelection(JSON.stringify( postContent["value"] ))
+				editor.replaceSelection(await getGhostPosts())
 			} 
 		});
 		
