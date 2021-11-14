@@ -72,26 +72,15 @@ export default class MyPlugin extends Plugin {
 			id: "ghost-sync-init",
 			name: "Init",
 			callback: async () => {
-				// new SampleModal(this.app).open();
-				// new Notice('Ghost Sync: Initializing');
-				// new Notice('Ghost Sync: Pasted current blog post');
-				// let apiKey  = this.settings.ghostContentApiKey
-				// let baseUrl  = this.settings.baseUrl
-				// new Notice(`${apiKey},${baseUrl}`);
-
-				// let result = await SyncService(this.app,apiKey,baseUrl)
-				// new Notice("done");
-				let file = "./test/workss.md"
-				this.app.vault.create(file, "s",)
-				// new Notice();
+		
 				new Notice('Ghost Sync: Initializing');
-				new Notice('Ghost Sync: Pasted current blog post');
 				let apiKey = this.settings.ghostContentApiKey
 				let baseUrl = this.settings.baseUrl
-				new Notice(`${apiKey},${baseUrl}`);
+				new Notice(`Using Ghost Content Api key:${apiKey}`);
+				new Notice(`Using Ghost Url:${baseUrl}`);
 
 				let result = await SyncService(this.app, apiKey, baseUrl)
-				new Notice("done");
+				new Notice("Ghost Sync: Finished Sync!");
 
 			}
 		});
@@ -194,7 +183,7 @@ class SampleSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.ghostContentApiKey)
 				.onChange(async (value) => {
 					console.log('ghostContentApiKey: ' + value);
-					this.plugin.settings.ghostContentApiKey = value;
+					this.plugin.settings.ghostContentApiKey = value.trim();
 					await this.plugin.saveSettings();
 				}));
 
@@ -206,7 +195,7 @@ class SampleSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.baseUrl)
 				.onChange(async (value) => {
 					console.log('baseUrl: ' + value);
-					this.plugin.settings.baseUrl = value;
+					this.plugin.settings.baseUrl =  value.trim();
 					await this.plugin.saveSettings();
 				}));
 	}

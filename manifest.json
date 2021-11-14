@@ -1,7 +1,7 @@
 {
   "id": "ghost-sync",
   "name": "Ghost Blog Sync",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "minAppVersion": "0.12.0",
   "description": "Plugin allows for syncing all posts from your ghost blog",
   "author": "Oran C (Wisehackermonkey@github)",

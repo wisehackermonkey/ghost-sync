@@ -23,15 +23,15 @@ const fetchJson = async (url) => {
 // const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => fn(v), firstValue)
 
 const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => {
-    
-    if(Array.isArray(fn)){
-        if(fn.length >= 2){
-            return fn[0](v,fn[1])
+
+    if (Array.isArray(fn)) {
+        if (fn.length >= 2) {
+            return fn[0](v, fn[1])
         }
-    }    
+    }
     return fn(v)
 }
-    
+
     , firstValue)
 
 const pipeAwait = async (firstValue, ...fns) => [...fns].reduce(async (v, fn) => await fn(v), firstValue)
@@ -47,9 +47,9 @@ const formate_file_name = (x) => x.map((v) => { v.title = v.title.toLowerCase().
 const write_files_to_disk = (x) => x.map((file, i) => {
     fs.writeFileSync(`./temp/${file.title}.md`, file.html)
 })
-const notifyer = (x) => { new Notice("Here"); return x }
+const notifyer = (x) => { new Notice(JSON.stringify(x) || "notifyer"); return x }
 // example https://demo.ghost.io/ghost/api/v3/content/posts?key=22444f78447824223cefc48062&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=50&=page=0
-const format_url = (blog_url, api_key, start_page = 1, limit = DEFAULT_PAGE_LIMIT) => (`${blog_url}/ghost/api/v3/content/posts?key=${api_key}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&page=${start_page}&limit=${limit}`)
+const format_url = (blog_url, api_key, start_page = 0, limit = DEFAULT_PAGE_LIMIT) => (`${blog_url}/ghost/api/v3/content/posts?key=${api_key}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&page=${start_page}&limit=${limit}`)
 
 const page = async (prev_post, options) => {
     try {
@@ -59,10 +59,15 @@ const page = async (prev_post, options) => {
         }
         console.log(prev_post.meta)
         let nextPageNumber = prev_post.meta.pagination.next
+        if (nextPageNumber === 2 && prev_post.meta.pagination.page === 1) {
+            nextPageNumber = 1
+        }
 
+        
 
         let url = format_url(options.baseUrl, options.apiKey, nextPageNumber, DEFAULT_PAGE_LIMIT)
         new Notice(url);
+        console.log(url);
 
 
         let postsJson = await fetchJson(url);
@@ -96,24 +101,25 @@ const pagenage = async (options: { apiKey: string; baseUrl: string; }) => {
     return current_page
 }
 let saveNotes = async (x: object, app: App) => {
+    console.log(x)
     x.map((file, i: number) => {
-        
+        notifyer(file.title)
+        app.vault.createFolder("./temp/")
         app.vault.create(`./temp/${file.title}.md`, file.html)
-     })
-  
+    })
+
 }
 const SynService = async (app: App, apiKey: string, baseUrl: string) => {
-    new Notice(__dirname);
+    // new Notice(__dirname);
     let options = {
         "apiKey": apiKey || process.env.GHOST_CONTENT_API_KEY,
-        "baseUrl": baseUrl || "https://oran.ghost.io"
+        "baseUrl": baseUrl,
+        "app": app
     }
     let jsonPosts = await pagenage(options)
-    let result = pipe(jsonPosts, notifyer, extract_posts_object, convert_markdowns, formate_file_name,[saveNotes, app]);
+    // notifyer(jsonPosts)
+    let result = pipe(jsonPosts, extract_posts_object, convert_markdowns, formate_file_name, [saveNotes, app]);
 
-    // {fn: saveNotes, arg: app}
-    // [saveNotes, "woat"]
-    // saveNotes(result, app)
 }
 
 // SynService()

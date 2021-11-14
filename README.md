@@ -79,7 +79,7 @@ nodemon ./SyncService.js
 ![](assets/2021-11-14-09-42-29.png)
 # Links
 ### [mixmark-io/turndown: 🛏 An HTML to Markdown converter written in JavaScript](https://github.com/mixmark-io/turndown)
-### 
+### [pjeby/hot-reload: Automatically reload Obsidian plugins in development when their files are changed](https://github.com/pjeby/hot-reload)
 ### https://medium.com/javascript-scene/reduce-composing-software-fe22f0c39a1d
 ### https://www.freecodecamp.org/news/pipe-and-compose-in-javascript-5b04004ac937/
 ### [create a flie |Vault | Obsidian Plugin Developer Docs](https://marcus.se.net/obsidian-plugin-docs/api/classes/Vault)
