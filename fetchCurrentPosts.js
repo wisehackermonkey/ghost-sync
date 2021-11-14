@@ -1,5 +1,5 @@
 
-const fetchCurrentPosts = async(url: RequestInfo) => {
+const fetchCurrentPosts = async(url) => {
     try{
         return await fetch(url).then(x=>x.json() )
     }catch(e){
@@ -7,4 +7,4 @@ const fetchCurrentPosts = async(url: RequestInfo) => {
     }
 }
 
-export default  fetchCurrentPosts;
+export default fetchCurrentPosts;

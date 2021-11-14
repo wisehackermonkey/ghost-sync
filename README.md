@@ -28,6 +28,20 @@ Quick starting guide for new plugin devs:
 - Enable plugin in settings window.
 - For updates to the Obsidian API run `yarn update` in the command line under your repo folder.
 
+# Development
+```sh 
+cd /path/to/obsidian/vault/.obsidian/plugins/
+git clone 
+yarn 
+yarn run dev
+
+
+npm install -g nodemon
+nodemon ./SyncService.js
+
+```
+![](assets/2021-11-13-14-34-04.png)
+
 ### Releasing new releases
 
 - Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
@@ -61,6 +75,7 @@ Quick starting guide for new plugin devs:
   - eslint will then create a report with suggestions for code improvement by file and line number.
 - If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
   - `eslint .\src\`
+
 
 # Links
 ### [mixmark-io/turndown: 🛏 An HTML to Markdown converter written in JavaScript](https://github.com/mixmark-io/turndown)

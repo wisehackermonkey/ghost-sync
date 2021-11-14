@@ -11,7 +11,7 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^16.11.6",
+		"@types/node": "^16.11.7",
 		"@typescript-eslint/eslint-plugin": "^5.2.0",
 		"@typescript-eslint/parser": "^5.2.0",
 		"builtin-modules": "^3.2.0",
@@ -22,7 +22,7 @@
 	},
 	"dependencies": {
 		"dotenv": "^10.0.0",
-		"node-fetch": "^3.1.0",
+		"node-fetch": "2",
 		"turndown": "^7.1.1"
 	}
 }

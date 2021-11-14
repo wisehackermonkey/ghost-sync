@@ -69,7 +69,7 @@ export default class MyPlugin extends Plugin {
 			editorCallback: async(editor: Editor, view: MarkdownView) => {
 				console.log(editor.getSelection());
 				new Notice('Ghost Sync: Pasted current blog post');
-				editor.replaceSelection("works")//fetchCurrentPosts("https://demo.ghost.io/ghost/api/v3/content/posts/?key=22444f78447824223cefc48062"));
+				editor.replaceSelection("works") 
 
 			}
 		});

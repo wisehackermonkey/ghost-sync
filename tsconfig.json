@@ -18,5 +18,5 @@
   },
   "include": [
     "**/*.ts"
-, "fetchCurrentPosts.ts", "SyncService.js"  ]
+, "fetchCurrentPosts.js", "SyncService.js"  ]
 }
