@@ -1,6 +1,8 @@
+import { App, Notice } from 'obsidian';
+
 let TurndownService = require('turndown')
 let fs = require("fs")
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const fetch = (...args: any[]) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 let turndownService = new TurndownService()
 require('dotenv').config()
@@ -18,7 +20,20 @@ const fetchJson = async (url) => {
         console.warn(e)
     }
 }
-const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => fn(v), firstValue)
+// const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => fn(v), firstValue)
+
+const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => {
+    
+    if(Array.isArray(fn)){
+        if(fn.length >= 2){
+            return fn[0](v,fn[1])
+        }
+    }    
+    return fn(v)
+}
+    
+    , firstValue)
+
 const pipeAwait = async (firstValue, ...fns) => [...fns].reduce(async (v, fn) => await fn(v), firstValue)
 
 
@@ -30,8 +45,9 @@ const printJSON = (text) => { console.log(JSON.stringify(text, null, 2)); return
 const convert_markdowns = (x) => x.map((v) => { v.html = convert_html_to_markdown(v.html); return v })
 const formate_file_name = (x) => x.map((v) => { v.title = v.title.toLowerCase().replaceAll(/([^a-zA-Z])/g, " ").replaceAll(/([\s]{2,10})/g, " ").replaceAll(" ", "_"); return v; })
 const write_files_to_disk = (x) => x.map((file, i) => {
-    fs.writeFileSync(`../../../temp/${file.title}.md`, file.html)
+    fs.writeFileSync(`./temp/${file.title}.md`, file.html)
 })
+const notifyer = (x) => { new Notice("Here"); return x }
 // example https://demo.ghost.io/ghost/api/v3/content/posts?key=22444f78447824223cefc48062&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=50&=page=0
 const format_url = (blog_url, api_key, start_page = 1, limit = DEFAULT_PAGE_LIMIT) => (`${blog_url}/ghost/api/v3/content/posts?key=${api_key}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&page=${start_page}&limit=${limit}`)
 
@@ -46,6 +62,7 @@ const page = async (prev_post, options) => {
 
 
         let url = format_url(options.baseUrl, options.apiKey, nextPageNumber, DEFAULT_PAGE_LIMIT)
+        new Notice(url);
 
 
         let postsJson = await fetchJson(url);
@@ -62,7 +79,7 @@ const page = async (prev_post, options) => {
         console.warn(e)
     }
 }
-const pagenage = async (options) => {
+const pagenage = async (options: { apiKey: string; baseUrl: string; }) => {
     let current_page = {
         "posts": [
         ],
@@ -78,14 +95,25 @@ const pagenage = async (options) => {
     }
     return current_page
 }
-const SynService = async (apiKey, baseUrl) => {
+let saveNotes = async (x: object, app: App) => {
+    x.map((file, i: number) => {
+        
+        app.vault.create(`./temp/${file.title}.md`, file.html)
+     })
+  
+}
+const SynService = async (app: App, apiKey: string, baseUrl: string) => {
+    new Notice(__dirname);
     let options = {
         "apiKey": apiKey || process.env.GHOST_CONTENT_API_KEY,
         "baseUrl": baseUrl || "https://oran.ghost.io"
-
     }
     let jsonPosts = await pagenage(options)
-    pipe(jsonPosts, printJSON, extract_posts_object, convert_markdowns, formate_file_name, write_files_to_disk)
+    let result = pipe(jsonPosts, notifyer, extract_posts_object, convert_markdowns, formate_file_name,[saveNotes, app]);
+
+    // {fn: saveNotes, arg: app}
+    // [saveNotes, "woat"]
+    // saveNotes(result, app)
 }
 
 // SynService()

@@ -1,4 +1,17 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {
+	App,
+	Editor,
+	MarkdownView,
+	Modal,
+	Notice,
+	Plugin,
+	PluginSettingTab,
+	Setting,
+	normalizePath,
+	TFolder,
+	Vault,
+	TFile
+} from 'obsidian';
 import SyncService from "./SyncService"
 require('dotenv').config()
 
@@ -12,10 +25,22 @@ interface MyPluginSettings {
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default',
-	ghostContentApiKey: "",
+	ghostContentApiKey: "22444f78447824223cefc48062",
 	baseUrl: "https://demo.ghost.io"
 }
+function resolve_tfolder(app: App, folder_str: string): TFolder {
+	folder_str = normalizePath(folder_str);
 
+	const folder = app.vault.getAbstractFileByPath(folder_str);
+	if (!folder) {
+		throw new Error(`Folder "${folder_str}" doesn't exist`);
+	}
+	if (!(folder instanceof TFolder)) {
+		throw new Error(`${folder_str} is a file, not a folder`);
+	}
+
+	return folder;
+}
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
@@ -48,12 +73,26 @@ export default class MyPlugin extends Plugin {
 			name: "Init",
 			callback: async () => {
 				// new SampleModal(this.app).open();
+				// new Notice('Ghost Sync: Initializing');
+				// new Notice('Ghost Sync: Pasted current blog post');
+				// let apiKey  = this.settings.ghostContentApiKey
+				// let baseUrl  = this.settings.baseUrl
+				// new Notice(`${apiKey},${baseUrl}`);
+
+				// let result = await SyncService(this.app,apiKey,baseUrl)
+				// new Notice("done");
+				let file = "./test/workss.md"
+				this.app.vault.create(file, "s",)
+				// new Notice();
 				new Notice('Ghost Sync: Initializing');
 				new Notice('Ghost Sync: Pasted current blog post');
-				let apiKey  = this.settings.ghostContentApiKey
-				let baseUrl  = this.settings.baseUrl
-				let result = await SyncService(apiKey,baseUrl)
+				let apiKey = this.settings.ghostContentApiKey
+				let baseUrl = this.settings.baseUrl
+				new Notice(`${apiKey},${baseUrl}`);
+
+				let result = await SyncService(this.app, apiKey, baseUrl)
 				new Notice("done");
+
 			}
 		});
 
@@ -172,4 +211,3 @@ class SampleSettingTab extends PluginSettingTab {
 				}));
 	}
 }
-c
