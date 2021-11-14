@@ -5,20 +5,24 @@ let turndownService = new TurndownService()
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 require('dotenv').config()
 
-
-const fetchCurrentPosts = async (url) => {
+const DEFAULT_PAGE_LIMIT = 20
+const fetchJson = async (url) => {
     try {
         return await fetch(url).then(x => x.json())
     } catch (e) {
+        if(e.name === "FetchError"){
+            console.log(`The your url you provided is invalid or that server is down \nthe url you used was:\n-----\n ${url}\n-----`)
+            return "error"
+        }
+
         console.warn(e)
     }
 }
 const pipe = (firstValue, ...fns) =>  [...fns].reduce((v, fn) => fn(v), firstValue)
+const pipeAwait = async (firstValue, ...fns) =>  [...fns].reduce(async(v, fn) => await fn(v), firstValue)
 
 // grab url posts
-const getGhostPosts = async (url) => {
-    return await fetchCurrentPosts(url);
-}
+ 
 const jsonStringify = (x) => JSON.stringify(x);
 
 
@@ -31,26 +35,61 @@ const formate_file_name = (x) => x.map((v)=>{v.title =v.title.toLowerCase().repl
 const write_files_to_disk = (x) => x.map((file, i) => {
     fs.writeFileSync(`../../../temp/${file.title}.md`, file.html)
 })
-const format_url = (blog_url, api_key,start_page=0,limit=50) => (`${blog_url}/ghost/api/v3/content/posts?key=${api_key}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&page=${start_page}&limit=${limit}`)
-// &limit=50&page=1
-const pagenage = (n)=> {
-    
-}
-const SynService = async (api_key) => {
+// example https://demo.ghost.io/ghost/api/v3/content/posts?key22444f78447824223cefc48062&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=50&=page=0
+const format_url = (blog_url, api_key,start_page=1,limit=DEFAULT_PAGE_LIMIT) => (`${blog_url}/ghost/api/v3/content/posts?key=${api_key}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&page=${start_page}&limit=${limit}`)
+ 
+const page = async (prev_post,options) =>{
     try {
+            
+        if(prev_post === null || prev_post === undefined || prev_post === false){
+            return false
+        }
+        console.log(prev_post.meta)
+        let nextPageNumber = prev_post.meta.pagination.next
         
-        let URL  =  format_url("https://oran.ghost.io", api_key,0)//`https://oran.ghost.io/ghost/api/v3/content/posts?key=${api_key|process.env.GHOST_CONTENT_API_KEY}&fields=id,title,url,feature_image,created_at,custom_excerpt,html`
-        // let URL = `https://demo.ghost.io/ghost/api/v3/content/posts?key=${"22444f78447824223cefc48062"}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=4`
-        console.log(URL)
-        let postsJson = await getGhostPosts(URL);
 
-        pipe(postsJson,   extract_posts_object, printJSON,convert_markdowns,         formate_file_name,printJSON,write_files_to_disk)
+        let url  =  format_url(options.baseUrl, options.apiKey, nextPageNumber,DEFAULT_PAGE_LIMIT)
+         
 
+        let postsJson = await fetchJson(url);
+        if(postsJson.posts === null || postsJson.posts === undefined || postsJson.posts === false){
+            return false
+        }
+        // postsJson.meta.pagination.next  =    prev_post.meta.pagination.next
+        // postsJson.meta.pagination.page  =    prev_post.meta.pagination.page
+        postsJson.posts = [...postsJson.posts,...prev_post.posts]
+        // console.log(postsJson)
+        return await postsJson
 
     } catch (e) {
         console.warn(e)
     }
 }
+const pagenage = async (options)=> {
+    let current_page = {
+        "posts": [ 
+        ],
+        "meta": {
+          "pagination": {
+            "page": 1, 
+            "next": 2
+          }
+        }
+    }
+    while( current_page.meta.pagination.next !== null){
+        current_page = await page(current_page,options)
+    }
+    return current_page
+}
+const SynService = async (apiKey) => {
+    let options = {
+        "apiKey": apiKey || process.env.GHOST_CONTENT_API_KEY ,
+        "baseUrl": "https://oran.ghost.io"
+    
+    }
+    let jsonPosts = await pagenage(options)
+    pipe(jsonPosts, printJSON,extract_posts_object,convert_markdowns, formate_file_name,write_files_to_disk)
+}
 
-SynService(process.env.GHOST_CONTENT_API_KEY)
+SynService()
 // export default  SynService;
