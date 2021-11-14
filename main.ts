@@ -46,7 +46,7 @@ export default class MyPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-
+		new Notice('Pluggin: Ghost Sync Loaded');
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Ghost Blog Sync', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
