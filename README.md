@@ -57,7 +57,9 @@ nodemon ./SyncService.js
 - Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
 
 ### How to use
-
+```bash
+cit clone 
+```
 - Clone this repo.
 - `yarn` to install dependencies
 - `yarn run dev` to start compilation in watch mode.
