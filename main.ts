@@ -1,5 +1,4 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import fetchCurrentPosts  from './fetchCurrentPosts';
 import SyncService from "./SyncService"
 require('dotenv').config()
 
@@ -8,17 +7,15 @@ require('dotenv').config()
 interface MyPluginSettings {
 	mySetting: string;
 	ghostContentApiKey: string;
+	baseUrl: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default',
-	ghostContentApiKey: ""
+	ghostContentApiKey: "",
+	baseUrl: "https://demo.ghost.io"
 }
 
-const getGhostPosts = async()=>{
-	let URL  = `https://oran.ghost.io/ghost/api/v3/content/posts?key=${process.env.GHOST_CONTENT_API_KEY}&fields=id,title,url,feature_image,created_at,custom_excerpt,html&limit=1`
-	return  await JSON.stringify( fetchCurrentPosts(URL));
-}
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
@@ -45,31 +42,29 @@ export default class MyPlugin extends Plugin {
 				new SampleModal(this.app).open();
 			}
 		});
- 
+
 		this.addCommand({
-			id:"ghost-sync-init",
-			name:"Init",
-			callback: async() => {
+			id: "ghost-sync-init",
+			name: "Init",
+			callback: async () => {
 				// new SampleModal(this.app).open();
 				new Notice('Ghost Sync: Initializing');
- 				new Notice('Ghost Sync: Pasted current blog post');
-				new Notice(await getGhostPosts()); 
-			},
-			editorCallback: async(editor: Editor, view: MarkdownView) => {
- 				new Notice("Pasted"); 
-
-				editor.replaceSelection(await getGhostPosts())
-			} 
+				new Notice('Ghost Sync: Pasted current blog post');
+				let apiKey  = this.settings.ghostContentApiKey
+				let baseUrl  = this.settings.baseUrl
+				let result = await SyncService(apiKey,baseUrl)
+				new Notice("done");
+			}
 		});
-		
+
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
 			id: 'ghost-sync-update',
 			name: 'Update',
-			editorCallback: async(editor: Editor, view: MarkdownView) => {
+			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				console.log(editor.getSelection());
 				new Notice('Ghost Sync: Pasted current blog post');
-				editor.replaceSelection("works") 
+				editor.replaceSelection("works")
 
 			}
 		});
@@ -125,12 +120,12 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -144,35 +139,37 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for Ghost Blog Sync'});
-		containerEl.createEl('h3', {text: 'This app allows for syncing (download only currently) all posts from your ghost blog!'});
-		
-		// new Setting(containerEl)
-		// 	.setName('Ghost Content API key')
-		// 	.setDesc('example: dd0235ab7a7db900270842123a')
-		// 	.addText(text => text
-		// 		.setPlaceholder('dd0235ab7a7db900270842123a')
-		// 		.setValue(this.plugin.settings.mySetting)
-		// 		.onChange(async (value) => {
-		// 			console.log('Secret: ' + value);
-		// 			this.plugin.settings.mySetting = value;
-		// 			await this.plugin.saveSettings();
-		// 		}));
+		containerEl.createEl('h2', { text: 'Settings for Ghost Blog Sync' });
+		containerEl.createEl('h3', { text: 'This app allows for syncing (download only currently) all posts from your ghost blog!' });
 
-				new Setting(containerEl)
-				.setName('Ghost Content API key')
-				.setDesc('example: dd0235ab7a7db900270842123a')
-				.addText(text => text
-					.setPlaceholder('dd0235ab7a7db900270842123a')
-					.setValue(this.plugin.settings.ghostContentApiKey)
-					.onChange(async (value) => {
-						console.log('ghostContentApiKey: ' + value);
-						this.plugin.settings.ghostContentApiKey = value;
-						await this.plugin.saveSettings();
-					}));
+
+		new Setting(containerEl)
+			.setName('Ghost Content API key')
+			.setDesc('example: dd0235ab7a7db900270842123a')
+			.addText(text => text
+				.setPlaceholder('dd0235ab7a7db900270842123a')
+				.setValue(this.plugin.settings.ghostContentApiKey)
+				.onChange(async (value) => {
+					console.log('ghostContentApiKey: ' + value);
+					this.plugin.settings.ghostContentApiKey = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Ghost Website Url')
+			.setDesc('example: https://demo.ghost.io')
+			.addText(text => text
+				.setPlaceholder('https://demo.ghost.io')
+				.setValue(this.plugin.settings.baseUrl)
+				.onChange(async (value) => {
+					console.log('baseUrl: ' + value);
+					this.plugin.settings.baseUrl = value;
+					await this.plugin.saveSettings();
+				}));
 	}
 }
+c
