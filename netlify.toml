@@ -1,9 +1,4 @@
 [build]
     functions = "./functions"
     GIT_LFS_ENABLED = true
-    NETLIFY_USE_YARN = true
     ENVIRONMENT = "PRODUCTION"
-[[redirects]]
-    from = "/api/v1/"
-    to = "/.netlify/functions/:splat"
-    status = 200
