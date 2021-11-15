@@ -1,12 +1,12 @@
 [build]
-    command = "yarn build"
-    publish = "build/"
+    command = "yarn"
+    publish = "public/"
     functions = "./functions"
     GIT_LFS_ENABLED = true
     NETLIFY_USE_YARN = true
     ENVIRONMENT = "PRODUCTION"
     functions = "lambda" # yarn add netlify-lambda
 [[redirects]]
-    from = "/api/"
+    from = "/api/v1/"
     to = "/.netlify/functions/:splat"
     status = 200
