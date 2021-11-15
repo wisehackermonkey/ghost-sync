@@ -1,2 +1,4 @@
 [build]
     functions = "./functions"
+    GIT_LFS_ENABLED = true
+    publish = "public/"
