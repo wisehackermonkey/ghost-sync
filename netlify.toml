@@ -2,3 +2,5 @@
     functions = "./functions"
     GIT_LFS_ENABLED = true
     ENVIRONMENT = "PRODUCTION"
+    ignore = "git diff --quiet \"${CACHED_COMMIT_REF}\" \"${COMMIT_REF}\" . ../../yarn.lock ../bzx-common"
+
