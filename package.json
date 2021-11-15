@@ -21,8 +21,13 @@
 		"typescript": "4.4.4"
 	},
 	"dependencies": {
+		"@tryghost/admin-api": "^1.4.4",
+		"axios": "^0.24.0",
 		"dotenv": "^10.0.0",
+		"json-to-pretty-yaml": "^1.2.2",
+		"jsonwebtoken": "^8.5.1",
 		"node-fetch": "2",
-		"turndown": "^7.1.1"
+		"turndown": "^7.1.1",
+		"yamljs": "^0.3.0"
 	}
 }

@@ -85,9 +85,16 @@ cit clone
 ### https://medium.com/javascript-scene/reduce-composing-software-fe22f0c39a1d
 ### https://www.freecodecamp.org/news/pipe-and-compose-in-javascript-5b04004ac937/
 ### [create a flie |Vault | Obsidian Plugin Developer Docs](https://marcus.se.net/obsidian-plugin-docs/api/classes/Vault)
+### [Ghost Admin API Documentation](https://ghost.org/docs/admin-api/)
+### [kmaasrud/awesome-obsidian: 🕶️ Awesome stuff for Obsidian](https://github.com/kmaasrud/awesome-obsidian#for-developers)
 
  
 
 ### API Documentation
 
 See https://github.com/obsidianmd/obsidian-api
+
+
+# work flow
+
+

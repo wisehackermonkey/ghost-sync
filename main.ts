@@ -13,6 +13,8 @@ import {
 	TFile
 } from 'obsidian';
 import SyncService from "./SyncService"
+import GhostAdminAPI from '@tryghost/admin-api';
+
 require('dotenv').config()
 
 // Remember to rename these classes and interfaces!
