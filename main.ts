@@ -155,16 +155,25 @@ export default class MyPlugin extends Plugin {
 						.setIcon("document")
 						.onClick(async () => {
 							new Notice(view.file.path);
-							let selectedPage = this.app.workspace.getActiveFile()
-							let { path, basename, name, unsafeCachedData } = selectedPage
-							console.log(postHelpers.schemaParse(unsafeCachedData))
-							console.log(postHelpers.schemaStringify({
-								"version": "1.0",
-								"title": "Ghost Sync Test Post",
-								"url": "https://oran.ghost.io/ghost-sync-test-post/",
-								"public": true,
-								"image": "https://t3.ftcdn.net/jpg/02/92/15/64/360_F_292156404_ypLsZWQiPXfTsYiYF8FNqz58TXr4uhkj.jpg"
-							}))
+							const httpRequest = require("obsidian-http-request");
+
+							httpRequest.getText("http://api.chucknorris.io/jokes/random")
+								.then((result: any) => {
+									console.log(result);  // -> String
+								})
+								.catch((error: Error) => {
+									console.error(error);
+								});
+							// let selectedPage = this.app.workspace.getActiveFile()
+							// let { path, basename, name, unsafeCachedData } = selectedPage
+							// console.log(postHelpers.schemaParse(unsafeCachedData))
+							// console.log(postHelpers.schemaStringify({
+							// 	"version": "1.0",
+							// 	"title": "Ghost Sync Test Post",
+							// 	"url": "https://oran.ghost.io/ghost-sync-test-post/",
+							// 	"public": true,
+							// 	"image": "https://t3.ftcdn.net/jpg/02/92/15/64/360_F_292156404_ypLsZWQiPXfTsYiYF8FNqz58TXr4uhkj.jpg"
+							// }))
 							// console.log(selectedPage)
 							// console.log(path,"\n",basename,"\n",name,"\n",unsafeCachedData)
 						});
@@ -193,7 +202,7 @@ export default class MyPlugin extends Plugin {
 
 								Post.uploadPost(post)
 							};
-			
+
 							new CreatePost(this.app, "Name of post", onSubmit).open();
 						});
 				});
@@ -286,29 +295,29 @@ class SampleSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-				new Setting(containerEl)
-				.setName('Ghost Website Url')
-				.setDesc('example: https://demo.ghost.io')
-				.addText(text => text
-					.setPlaceholder('https://demo.ghost.io')
-					.setValue(this.plugin.settings.baseUrl)
-					.onChange(async (value) => {
-						console.log('baseUrl: ' + value);
-						this.plugin.settings.baseUrl = value.trim();
-						await this.plugin.saveSettings();
-					}));
-					
 		new Setting(containerEl)
-		.setName('Ghost Admin Api Key')
-		.setDesc('Required for (posting)')
-		.addText(text => text
-			.setPlaceholder('2244...32e32:2244...32e32')
-			.setValue(this.plugin.settings.baseUrl)
-			.onChange(async (value) => {
-				console.log('baseUrl: ' + value);
-				this.plugin.settings.ghostAdminApiKey = value.trim();
-				await this.plugin.saveSettings();
-			}));
+			.setName('Ghost Website Url')
+			.setDesc('example: https://demo.ghost.io')
+			.addText(text => text
+				.setPlaceholder('https://demo.ghost.io')
+				.setValue(this.plugin.settings.baseUrl)
+				.onChange(async (value) => {
+					console.log('baseUrl: ' + value);
+					this.plugin.settings.baseUrl = value.trim();
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Ghost Admin Api Key')
+			.setDesc('Required for (posting)')
+			.addText(text => text
+				.setPlaceholder('2244...32e32:2244...32e32')
+				.setValue(this.plugin.settings.baseUrl)
+				.onChange(async (value) => {
+					console.log('baseUrl: ' + value);
+					this.plugin.settings.ghostAdminApiKey = value.trim();
+					await this.plugin.saveSettings();
+				}));
 	}
 }
 

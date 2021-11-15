@@ -1,9 +1,16 @@
-// const GhostAdminAPI = require('@tryghost/admin-api');
 
 // Create a token without the client
-const jwt = require('jsonwebtoken');
-const axios = require('axios');
 
+const jwt = require('jsonwebtoken');
+const httpRequest = require("obsidian-http-request");
+
+httpRequest.getText("http://example.com/hello.txt")
+    .then(function(result) {
+        console.log(result);
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
 require("dotenv").config()
 // Configure the client
 
@@ -27,16 +34,34 @@ const uploadPost = async (options) => {
 
     // Make an authenticated request to create a post
     const url = options.url;
-    const headers = {
-        Authorization: `Ghost ${token}`,
-        'Access-Control-Allow-Origin': '*',
-    };
     const payload = { posts: [{ title: options.title }] };
-    let result = await axios.post(url, payload, { headers })
+    
+    
+    
+    // let result = await axios.post(url, payload, { headers })
+    httpRequest.request(options.url, {
+        method: "POST",
+        headers: {
+            Authorization: `Ghost ${token}`,
+            "Access-Control-Allow-Origin": "*",
+            "content-type": "application/json",
+            "x-foo": "bar"
+        },
+        body: Buffer.from(JSON.stringify(payload))  // body must be a Node Buffer or null
+    })
+        .then(function(resultBuffer) {                   // response is also a Node Buffer
+            var result = JSON.parse(resultBuffer.toString());
+            console.log(result);
+            // console.log(result)
+            return result
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
     // .then(response => console.log(response))
     // .catch(error => console.error(error));
-    console.log(result)
-    return result
+    // console.log(result)
+    // return result
 
 
     // Make an authenticated request
