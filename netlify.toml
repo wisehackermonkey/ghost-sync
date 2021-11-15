@@ -1,10 +1,8 @@
 [build]
-    command = "yarn"
     functions = "./functions"
     GIT_LFS_ENABLED = true
     NETLIFY_USE_YARN = true
-    ENVIRONMENT = "PRODUCTION"
-    functions = "lambda" # yarn add netlify-lambda
+    ENVIRONMENT = "PRODUCTION" # functions = "lambda" # yarn add netlify-lambda command = "yarn"
 [[redirects]]
     from = "/api/v1/"
     to = "/.netlify/functions/:splat"
