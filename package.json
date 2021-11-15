@@ -27,6 +27,7 @@
 		"json-to-pretty-yaml": "^1.2.2",
 		"jsonwebtoken": "^8.5.1",
 		"node-fetch": "2",
+		"obsidian-http-request": "^1.4.0",
 		"turndown": "^7.1.1",
 		"yamljs": "^0.3.0"
 	}
