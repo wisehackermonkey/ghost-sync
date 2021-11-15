@@ -22,12 +22,15 @@ const print = (x) => { console.log("-----"); console.log(x); return x; }
 const extractSchemaHeader = (x) => {
     // https://regexr.com/69gsu
     // https://regexr.com/69gso
-    return x.match(/^(\%\%)[^]+?(\%\%)$/gm)[0].replace(/((^\%\%)|(\%\%$))/gm, "")
+    return x.match(/^(\%\%)[^]+?(\%\%)$/gm)[0].replace(/((^\%\%)|(\%\%$))/gm, "").trim()
 }
 const parseHeaderSchema = (x) => YAML.parse(x)
-const schemaParse = (x) => pipe(extractSchemaHeader,parseHeaderSchema)
-const schemaStringify = (x) => 
-`%%${toYaml(x)}%%```
+const schemaParse = (x) => pipe(x,print,extractSchemaHeader,YAML.parse,print)
+const schemaStringify = (x) => {
+     
+    return  `%%
+${YAML.stringify(x)}%%`
+}
 // const extractSchema = (x)=> {}
 // let example_object = {
 //     "version": "1.0",
@@ -58,3 +61,20 @@ const schemaStringify = (x) =>
 
 // x,x,s,v,[[e,s,tr,s,SDF,],
 //          [E,R,S,S,D]], G,FS,S,D,Q,S
+
+export default {schemaParse,schemaStringify}
+
+s  = `%%
+version: '1.0'
+title: Ghost Sync Test Post
+url: https://oran.ghost.io/ghost-sync-test-post/
+public: true
+image: https://t3.ftcdn.net/jpg/02/92/15/64/360_F_292156404_ypLsZWQiPXfTsYiYF8FNqz58TXr4uhkj.jpg
+%%
+
+# dsafasdf
+%%
+a%%sddfds%%
+dasdf
+%%`
+// pipe(s,print,extractSchemaHeader,parseHeaderSchema,print)

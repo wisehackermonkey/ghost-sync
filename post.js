@@ -2,7 +2,7 @@ const GhostAdminAPI = require('@tryghost/admin-api');
 require("dotenv").config()
 // Configure the client
 
-const createPost = async (options) => {
+const uploadPost = async (options) => {
     // Make an authenticated request
     const api = new GhostAdminAPI({
         url: options.url,
@@ -22,10 +22,12 @@ const createPost = async (options) => {
 
 }
 
-createPost(
-    {
-        data: "wow it works",
-        url: 'https://oran.ghost.io',
-        title: "hello world",
-        apiKey: process.env.GHOST_ADMIN_API_KEY,
-    })
+// uploadPost(
+//     {
+//         data: "wow it works",
+//         url: 'https://oran.ghost.io',
+//         title: "hello world",
+//         apiKey: process.env.GHOST_ADMIN_API_KEY,
+//     })
+
+export default {uploadPost}
