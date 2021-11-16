@@ -31,20 +31,26 @@ yarn run dev
  
 
 # netlify api entpoints
-`https://ghostsync.netlify.app/.netlify/functions/post`
+`https://ghostsync.netlify.app/.netlify/functions/createpost`
 or
-`https://ghostsync.netlify.app/api/v1/post`
+`https://ghostsync.netlify.app/api/v1/createpost`
 # run netlify function (api endpoint) locally with netlify-cli
 ```bash
 netlify dev
 ```
 ### open browser to 
-`http://localhost:8888/.netlify/functions/post`
+`http://localhost:8888/.netlify/functions/createpost`
 
 ### example requiest
-`http://localhost:8888/.netlify/functions/post?ghostAdminApiKey=24324324234`
+`http://localhost:8888/.netlify/functions/createpost?ghostAdminApiKey=24324324234`
 
 ![](assets/2021-11-16-14-48-34.png)
+### example api requiest
+`http://localhost:8888/api/v1/createpost?ghostAdminApiKey=<API KEY>&baseUrl=https%3A%2F%2Foransblog.com&title=Ghost%20sync%3A%20the%20amazing%20obsidian%20app&image=https%3A%2F%2Fvia.placeholder.com%2F150&public=true&version=1.0`
+![](assets/2021-11-16-15-39-37.png)
+
+# Dev log
+### its alive!
 ![](assets/2021-11-14-09-42-29.png)
 # Links
 ### [mixmark-io/turndown: 🛏 An HTML to Markdown converter written in JavaScript](https://github.com/mixmark-io/turndown)

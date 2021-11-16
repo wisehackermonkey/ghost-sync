@@ -16,7 +16,7 @@ import {
 import SyncService from "./SyncService"
 import postHelpers from "./postHelpers"
 import { CreatePost } from "./CreatePost"
-import Post from "./post"
+import Post from "./post2"
 require('dotenv').config()
 
 // Remember to rename these classes and interfaces!
