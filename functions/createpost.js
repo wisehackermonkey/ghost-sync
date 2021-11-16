@@ -49,8 +49,14 @@ let response = {
     "updated_at":updated_at,
 }
 console.log(response)
+const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+  };
     return {
         statusCode: 200,
+        headers: headers,
         body: JSON.stringify(response)
     };
 }
