@@ -2,13 +2,13 @@
 	"name": "ghost-sync",
 	"version": "0.12.0",
 	"description": "Plugin allows for syncing all posts from your ghost blog",
-	"main": "main.js",
+	"main": "main.ts",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "node esbuild.config.mjs production"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Oran C <oranbusiness@gmail.com>",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^16.11.7",
@@ -30,5 +30,6 @@
 		"obsidian-http-request": "^1.4.0",
 		"turndown": "^7.1.1",
 		"yamljs": "^0.3.0"
-	}
+	},
+	"repository": "https://github.com/wisehackermonkey/ghost-sync.git"
 }

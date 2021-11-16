@@ -18,7 +18,7 @@ const uploadPost = async (options) => {
 
 
     // Admin API key goes here
-    const key = options.apiKey;
+    const key = options.ghostAdminghostAdminApiKey;
 
     // Split the key into ID and SECRET
     const [id, secret] = key.split(':');
@@ -88,7 +88,7 @@ const uploadPost = async (options) => {
 //         data: "wow it works",
 //         url: 'https://oran.ghost.io/ghost/api/v3/admin/posts/',
 //         title: "hello world",
-//         apiKey: process.env.GHOST_ADMIN_API_KEY,
+//        ghostAdminApiKey: process.env.GHOST_ADMIN_API_KEY,
 //     })
 
 

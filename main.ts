@@ -80,12 +80,12 @@ export default class MyPlugin extends Plugin {
 			callback: async () => {
 
 				new Notice('Ghost Sync: Initializing');
-				let apiKey = this.settings.ghostContentApiKey
+				let ghostAdminApiKey = this.settings.ghostContentApiKey
 				let baseUrl = this.settings.baseUrl
-				new Notice(`Using Ghost Content Api key:${apiKey}`);
+				new Notice(`Using Ghost Content Api key:${ghostAdminApiKey}`);
 				new Notice(`Using Ghost Url:${baseUrl}`);
 
-				let result = await SyncService(this.app, apiKey, baseUrl)
+				let result = await SyncService(this.app,ghostAdminApiKey, baseUrl)
 				new Notice("Ghost Sync: Finished Sync!");
 
 			}
@@ -189,14 +189,14 @@ export default class MyPlugin extends Plugin {
 						.setIcon("document")
 						.onClick(async () => {
 							new Notice("Creating Post");
-							let apiKey = this.settings.ghostAdminApiKey
+							let ghostAdminApiKey = this.settings.ghostAdminApiKey
 							let url = this.settings.baseUrl
 							const onSubmit = (title: string, image: string) => {
 								let post = {
 									data: "wow it works",
 									url: url || "",
 									title: title,
-									apiKey: apiKey,
+									ghostAdminApiKey:ghostAdminApiKey,
 								}
 								new Notice(JSON.stringify(post))
 

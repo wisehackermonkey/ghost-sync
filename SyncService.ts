@@ -65,7 +65,7 @@ const page = async (prev_post, options) => {
 
         
 
-        let url = format_url(options.baseUrl, options.apiKey, nextPageNumber, DEFAULT_PAGE_LIMIT)
+        let url = format_url(options.baseUrl, options.ghostAdminghostAdminApiKey, nextPageNumber, DEFAULT_PAGE_LIMIT)
         new Notice(url);
         console.log(url);
 
@@ -84,7 +84,7 @@ const page = async (prev_post, options) => {
         console.warn(e)
     }
 }
-const pagenage = async (options: { apiKey: string; baseUrl: string; }) => {
+const pagenage = async (options: {ghostAdminApiKey: string; baseUrl: string; }) => {
     let current_page = {
         "posts": [
         ],
@@ -109,10 +109,10 @@ let saveNotes = async (x: object, app: App) => {
     })
 
 }
-const SynService = async (app: App, apiKey: string, baseUrl: string) => {
+const SynService = async (app: App,ghostAdminApiKey: string, baseUrl: string) => {
     // new Notice(__dirname);
     let options = {
-        "apiKey": apiKey || process.env.GHOST_CONTENT_API_KEY,
+        "ghostAdminApiKey":ghostAdminApiKey || process.env.GHOST_CONTENT_API_KEY,
         "baseUrl": baseUrl,
         "app": app
     }
