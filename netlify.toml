@@ -3,6 +3,6 @@
     GIT_LFS_ENABLED = true
     publish = "public/"
 [[redirects]]
-    from = "/api/v1"
+    from = "/api/v1/"
     to = "/.netlify/functions/:splat"
     status = 200
