@@ -1,5 +1,5 @@
 [build]
-    build = "yarn"
+    build = "npm install"
     functions = "./functions"
     GIT_LFS_ENABLED = true
     publish = "public/"
