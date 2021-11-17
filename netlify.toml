@@ -1,5 +1,5 @@
 [build]
-    build = "npm install"
+    build = "npm install @tryghost/admin-api"
     functions = "./functions"
     GIT_LFS_ENABLED = true
     publish = "public/"
